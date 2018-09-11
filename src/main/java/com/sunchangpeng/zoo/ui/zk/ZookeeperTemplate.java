@@ -41,7 +41,7 @@ public class ZookeeperTemplate extends AbstractLifeCycle implements ZookeeperOpe
     public CuratorFramework curatorFramework(RetryPolicy retryPolicy, ZookeeperProperties properties) throws Exception {
         CuratorFrameworkFactory.Builder builder = CuratorFrameworkFactory.builder();
         builder.connectString(properties.getConnectString());
-        CuratorFramework curator = builder.retryPolicy(retryPolicy).build();
+        CuratorFramework curator = builder.retryPolicy(retryPolicy).defaultData(null).build();
         curator.start();
         log.trace("blocking until connected to zookeeper for " + properties.getBlockUntilConnectedWait() + properties.getBlockUntilConnectedUnit());
         curator.blockUntilConnected(properties.getBlockUntilConnectedWait(), properties.getBlockUntilConnectedUnit());
@@ -138,8 +138,8 @@ public class ZookeeperTemplate extends AbstractLifeCycle implements ZookeeperOpe
     }
 
     @Override
-    public String create(String path, Object obj, CreateMode mode) {
-        return create(path, obj == null ? null : JSON.toJSONString(obj), mode);
+    public String create(String path, Object data, CreateMode mode) {
+        return create(path, data == null ? null : JSON.toJSONString(data), mode);
     }
 
     @Override
@@ -164,12 +164,12 @@ public class ZookeeperTemplate extends AbstractLifeCycle implements ZookeeperOpe
 
     @Override
     public boolean createIfNotExists(String path, String data, CreateMode mode) {
-        return createIfNotExists(path, data.getBytes(StandardCharsets.UTF_8), mode);
+        return createIfNotExists(path, data == null ? null : data.getBytes(StandardCharsets.UTF_8), mode);
     }
 
     @Override
-    public boolean createIfNotExists(String path, Object obj, CreateMode mode) {
-        return createIfNotExists(path, JSON.toJSONString(obj), mode);
+    public boolean createIfNotExists(String path, Object data, CreateMode mode) {
+        return createIfNotExists(path, data == null ? null : JSON.toJSONString(data), mode);
     }
 
     @Override
@@ -194,12 +194,12 @@ public class ZookeeperTemplate extends AbstractLifeCycle implements ZookeeperOpe
 
     @Override
     public boolean update(String path, String data) {
-        return update(path, data.getBytes(StandardCharsets.UTF_8));
+        return update(path, data == null ? null : data.getBytes(StandardCharsets.UTF_8));
     }
 
     @Override
     public boolean update(String path, Object data) {
-        return update(path, JSON.toJSONString(data));
+        return update(path, data == null ? null : JSON.toJSONString(data));
     }
 
     @Override
@@ -222,12 +222,12 @@ public class ZookeeperTemplate extends AbstractLifeCycle implements ZookeeperOpe
 
     @Override
     public boolean updateIfExists(String path, String data) {
-        return updateIfExists(path, data.getBytes(StandardCharsets.UTF_8));
+        return updateIfExists(path, data == null ? null : data.getBytes(StandardCharsets.UTF_8));
     }
 
     @Override
     public boolean updateIfExists(String path, Object data) {
-        return updateIfExists(path, JSON.toJSONString(data));
+        return updateIfExists(path, data == null ? null : JSON.toJSONString(data));
     }
 
     @Override
