@@ -1,0 +1,8 @@
+language: java
+
+services:
+- docker
+`
+script:
+- java -version
+- ./mvnw clean install
